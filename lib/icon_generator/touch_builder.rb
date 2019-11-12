@@ -5,6 +5,9 @@ module IconGenerator
         # Initializes the default image sizes.
         def initialize
             @sizes = [
+                '192x192',
+                '180x180',
+                '167x167',
                 '152x152',
                 '144x144',
                 '120x120',
@@ -21,10 +24,18 @@ module IconGenerator
         # @param destination [String] the output directory
         def build(source, destination)
             @sizes.each do |size|
-                new_image = "#{destination}/apple-touch-icon-#{size}-precomposed.png"
-                build_size(source, size, new_image)
-                if size == '57x57'
+                if size == '192x192'
+                    build_size(source, '192x192', "#{destination}/touch-icon-192x192.png")                    
+                elsif size == '57x57'
+                    build_size(source, '57x57', "#{destination}/apple-touch-icon.png")                    
                     build_size(source, '57x57', "#{destination}/apple-touch-icon-precomposed.png")
+                else
+                    # Create precomposed icons
+                    new_precomposed_image = "#{destination}/apple-touch-icon-#{size}-precomposed.png"
+                    build_size(source, size, new_precomposed_image)
+                    # Create normal icons
+                    new_image = "#{destination}/apple-touch-icon-#{size}.png"
+                    build_size(source, size, new_image)                    
                 end
             end
         end
@@ -35,6 +46,7 @@ module IconGenerator
         # @param source [String] the source image file
         # @param destination [String] the output directory
         def build_single(source, destination)
+            build_size(source, '152x152', "#{destination}/apple-touch-icon.png")
             build_size(source, '152x152', "#{destination}/apple-touch-icon-precomposed.png")
         end
 
