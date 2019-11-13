@@ -4,8 +4,7 @@ module IconGenerator
 
         # Initializes the default image sizes.
         def initialize
-            @sizes = [
-                '192x192',
+            @apple_sizes = [
                 '180x180',
                 '167x167',
                 '152x152',
@@ -16,6 +15,21 @@ module IconGenerator
                 '72x72',
                 '57x57',
             ]
+            @chrome_sizes = [
+                '144x144',
+                '192x192',
+                '96x96',
+                '72x72',
+                '48x48',
+                '36x36',
+            ]
+            @microsoft_sizes = [
+                '310x310',
+                '310x150',
+                '150x150',
+                '144x144',
+                '70x70',
+            ]
         end
 
         # Builds apple-touch-icons from the given source file.
@@ -23,12 +37,10 @@ module IconGenerator
         # @param source [String] the source image file
         # @param destination [String] the output directory
         def build(source, destination)
-            @sizes.each do |size|
-                if size == '192x192'
-                    build_size(source, '192x192', "#{destination}/touch-icon-192x192.png")                    
-                elsif size == '57x57'
-                    build_size(source, '57x57', "#{destination}/apple-touch-icon.png")                    
-                    build_size(source, '57x57', "#{destination}/apple-touch-icon-precomposed.png")
+            @apple_sizes.each do |size|                   
+                if size == '180x180'
+                    build_size(source, '180x180', "#{destination}/apple-touch-icon.png")                    
+                    build_size(source, '180x180', "#{destination}/apple-touch-icon-precomposed.png")
                 else
                     # Create precomposed icons
                     new_precomposed_image = "#{destination}/apple-touch-icon-#{size}-precomposed.png"
@@ -38,6 +50,14 @@ module IconGenerator
                     build_size(source, size, new_image)                    
                 end
             end
+            @chrome_sizes.each do |size|
+                new_image = "#{destination}/touch-icon-#{size}.png"
+                build_size(source, size, new_image)
+            end
+            @microsoft_sizes.each do |size|
+                new_image = "#{destination}/mstile-#{size}.png"
+                build_size(source, size, new_image)
+            end
         end
 
         # Builds a single 152x152 apple-touch-icon-precomposed from the
@@ -46,8 +66,8 @@ module IconGenerator
         # @param source [String] the source image file
         # @param destination [String] the output directory
         def build_single(source, destination)
-            build_size(source, '152x152', "#{destination}/apple-touch-icon.png")
-            build_size(source, '152x152', "#{destination}/apple-touch-icon-precomposed.png")
+            build_size(source, '180x180', "#{destination}/apple-touch-icon.png")
+            build_size(source, '180x180', "#{destination}/apple-touch-icon-precomposed.png")
         end
 
         # Builds a given size of apple-touch-icon.
